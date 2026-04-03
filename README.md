@@ -25,7 +25,7 @@ An example of a single byte encoding would be:
 +--+-+---+--+------+--+
 ```
 
-The AA represents 2 junk bytes, just to prevent any kind of pattern recognition. B represents a 'skip' byte, which should be a value between 1-9. The skip byte indicates how many fake padded values of C that follow it. The C values are randomly generated hex values (0-9, A-F). Finally, DD holds our actual byte of the encoded string, in little endian. The BCDD streams repeat for each byte in the encoded string, and this follows until null termination.
+The AA represents 2 junk bytes, just to prevent any kind of pattern recognition. B represents a 'skip' byte, which should be a value between 1-9 (no 0 to avoid accidentally generating nulls). The skip byte indicates how many fake padded values of C that follow it. The C values are randomly generated hex values (0-9, A-F). Finally, DD holds our actual byte of the encoded string, in little endian. The BCDD streams repeat for each byte in the encoded string, and this follows until null termination.
 
 ## Example
 

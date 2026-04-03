@@ -15,7 +15,7 @@ Scytale is a lightweight custom encoding scheme, written entirely in x86-64 asse
 
 # Details
 
-I originally got the idea from an old ancient greek cipher method of the same name. I had wondered what it might look like expressed in code, and it was quite unusable. However, the idea of a veriable diameter 'rod' came to mind, which would solve the pattern recognition issues that the scytale faces. For the final version of the method, I embedded the 'key' into the encoding stream itself, so that there is no key necessary.
+I originally got the idea from an old ancient greek cipher method of the same name. I had wondered what it might look like expressed in code, and it was quite unusable. However, the idea of a variable diameter 'rod' came to mind, which would solve the pattern recognition issues that the scytale faces. For the final version of the method, I embedded the 'key' into the encoding stream itself, so that there is no key necessary.
 
 An example of a single byte encoding would be:
 

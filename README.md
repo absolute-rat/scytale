@@ -1,6 +1,6 @@
 # scytale
 
-scytale is a low-entropy/lightweight transpositional stream encoding scheme, written entirely in x64 assembly.
+scytale is a low-entropy/lightweight transpositional stream encoder, implemented in pure x64 assembly.
 
 ## Pros
 

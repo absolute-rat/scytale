@@ -3,7 +3,7 @@ import sys
 import random
 
 # Simple command line scytale encoder, for encoding resources/binary blobs/etc...
-# ./python3 ./scytale.py /path/to/file.bin
+# python3 ./scytale.py /path/to/file.bin
 
 
 def scytale_encode(data):

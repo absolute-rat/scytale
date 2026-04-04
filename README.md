@@ -27,7 +27,7 @@ An example of a single byte encoding would be:
 +--+-+-----+--+--+
 ```
 
-The stream is comprised of two segments, a simple evasion header, and the repeating payload byte stream. The header is simply 2 random ASCII hex values, to avoid static detection of any kind. The skip byte is a single byte, represented as a number between 1-9. This value determines the length of junk padding bytes that will follow the skip byte. Each padding byte is a random hex ASCII value (0-9,A-F). After the garbage padding, our associated payload byte will be represented by the actual little-endian 2 byte hex value, in ASCII (0x41 = 14). The stream repeats the skip byte/padding/payload byte for each byte in the real payload, and ends with a null terminator. 
+The stream is comprised of two segments, a simple evasion header, and the repeating payload byte stream. The header is simply 2 random ASCII hex values, to avoid static detection/pattern recognition. The skip byte is a single byte, represented as a number between 1-9. This value determines the length of junk padding bytes that will follow the skip byte. Each padding byte is a random hex ASCII value (0-9,A-F). After the garbage padding, our associated payload byte will be represented by the actual little-endian 2 byte hex value, in ASCII (0x41 = 14). The stream repeats the skip byte/padding/payload byte for each byte in the real payload, and ends with a null terminator. 
 
 ## Example
 

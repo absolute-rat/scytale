@@ -4,7 +4,7 @@ scytale is a low-entropy/lightweight stream encoder, implemented in pure x64 ass
 
 ## Pros
 
-- Small footprint means it can potentially fit in shellcode
+- Small footprint (<200 bytes)
 - Maintans a low entropy score (~4.0) no matter what data is being encoded
 - Avoids predictable byte-distance pattern recognition
 
@@ -22,12 +22,12 @@ An example of a single byte encoding would be:
 
 ```
 [Header][Skip Byte][Padding][Payload Byte]
-+--+-+---+--+--+
-|AA|B|CCC|DD|00|
-+--+-+---+--+--+
++--+-+-----+--+--+
+|AA|B|C...C|DD|00|
++--+-+-----+--+--+
 ```
 
-The AA represents 2 random junk hex bytes, just to prevent any kind of pattern recognition. This is probably a bit overkill, since the first byte isn't a valuable byte, but this could make manual inspection a bit more confusing. B represents a 'skip' byte, which should be a value between 1-9. The skip byte indicates how many fake padded values of C that follow it. The C values are randomly generated hex values (0-9, A-F). Finally, DD holds our actual byte of the encoded string, in little endian. The BCDD streams repeat for each byte in the encoded string, and this follows until null termination. The method could be altered rather trivially to include some basic new rules, for the purpose of evading any signatures that might be developed, and could be altered to use a key-based encryption/decryption method instead of the skip-byte architecture.
+The stream is comprised of two segments, a simple evasion header, and the repeating payload byte stream. The header is simply 2 random ASCII hex values, to avoid static detection of any kind. The skip byte is a single byte, represented as a number between 1-9. This value determines the length of junk padding bytes that will follow the skip byte. Each padding byte is a random hex ASCII value (0-9,A-F). After the garbage padding, our associated payload byte will be represented by the actual little-endian 2 byte hex value, in ASCII (0x41 = 14). The stream repeats the skip byte/padding/payload byte for each byte in the real payload, and ends with a null terminator. 
 
 ## Example
 
@@ -35,4 +35,9 @@ This is 'ABC' encoded in scytale:
 
 2F3BBC14939DFAB0B1241E34
 
-2F is our garbage header. 3 indicates 3 garbage characters to skip. '14' is our 0x41. 9 is our next part of the stream, indicating 9 garbage characters to skip. '24' is our 0x42. 1 indicates a single garbage character to skip, so '34' is our final byte, 0x43.
+2F is our garbage header. 3 indicates 3 garbage characters (BBC) to skip. '14' is our 0x41. 9 is our next part of the stream, indicating 9 garbage characters (39DFAB0B1) to skip. '24' is our 0x42. 1 indicates a single garbage character (E) to skip, so '34' is our final byte, 0x43.
+
+
+## Notes
+
+The method could be altered rather trivially to include some basic new rules, without strongly impacting the general flow architecture, which might make it easy enough to evade signatures. A key-based implementation would also not be too difficult to implement, if you didn't like leaving the full data in an accessible state for an analyst to access. I currently limit the skip byte to 1-9 purely for size reasons, as this already results in quite a large average encoded string.

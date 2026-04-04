@@ -4,39 +4,41 @@ SECTION .text
     GLOBAL scytale_decode
     GLOBAL scytale_encode
 
+; unsigned char* scytale_decode(const char* encoded_payload, unsigned char* buf);
 scytale_decode:
-    xchg rsi, rcx	; for math
-    xchg rdi, rdx	
-    lodsw		; hop over the fake header
-    xor rbx, rbx	; zero rbx (string length)
+	mov rsi, rcx		; encoded_payload
+	mov rdi, rdx		; buf
+	lodsw			; skip 2-byte header
 
-.loop:
-    lodsb		; read the skip byte
-    test al, al		; did we hit a null?
-    jz .done
-    sub al, 0x30	; convert to int
-    movzx rax, al	; fix the upper bits
-    add rsi, rax	; skip ahead by the value of the skip byte
-    lodsw		; grab the real bytes
-    sub ax, 0x3030	; dual wield subtraction
-    cmp ah, 9		; test high nibble
-    jbe .high
-    sub ah, 7
-.high:
-    shl ah, 4		; move high nibble to top 4 bits
-    cmp al, 9		; test low nibble
-    jbe .low
-    sub al, 7
-.low:
-    or al, ah		; let our nibbles combine
-    stosb               ; write the byte to buffer
-    inc rbx             ; string length++
-    jmp .loop
+.main_loop:
+	lodsb			; grab the skip byte
+	test al, al		; did we hit a null terminator?
+	jz .done
+	sub al, 0x30		; convert to int
+	movzx rcx, al		; zero upper bits
+	add rsi, rcx		; hop over the skip value
+	lodsb			; get the first byte
+	sub al, 0x30		; convert to int
+	cmp al, 9		; <=9 ?
+	jbe .first		; hop over
+	sub al, 7		; get the letter
+.first:
+	mov r8b, al		; store the low nibble
+	lodsb			; get the second byte
+	sub al, 0x30		; convert to int
+	cmp al, 9		; <=9 ?
+	jbe .second		; hop over
+	sub al, 7		; get the letter
+.second:
+	shl al, 4		; shift the bits over
+	or al, r8b		; let our nibbles combine 
+	stosb			; add to buf
+	jmp .main_loop		; all of this has happened before...
 
 .done:
-    xchg rax, rbx       ; return length
+    mov rax, rdi		; set up the return pointer
     ret
 
-
+; scytale_encode(char* dest, const char* src, size_t len);
 scytale_encode:
 	ret		; in progress

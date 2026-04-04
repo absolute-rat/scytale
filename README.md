@@ -21,7 +21,7 @@ I originally got the idea from an old ancient greek cipher method of the same na
 An example of a single byte encoding would be:
 
 ```
-[Header][Skip Byte][Padding][Payload Byte]
+[Header][Skip Byte][Padding][Payload Word]
 +--+-+-----+--+--+
 |AA|B|C...C|DD|00|
 +--+-+-----+--+--+

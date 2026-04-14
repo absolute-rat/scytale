@@ -5,12 +5,12 @@ scytale is a low-entropy/lightweight stream encoder, implemented in pure x64 ass
 ## Pros
 
 - Small footprint (<200 bytes)
-- Maintans a low entropy score (~4.0) no matter what data is being encoded
+- Maintans a low entropy score (around ~4.0) no matter what data is being encoded
 - Avoids predictable byte-distance pattern recognition
 
 ## Cons
 
-- Overhead causes roughly a 5x size increase for any encoded data
+- Overhead causes roughly a 8x size increase for any encoded data
 - Linear decoding process
 
 
@@ -40,4 +40,4 @@ This is 'ABC' encoded in scytale:
 
 ## Notes
 
-The method could be altered rather trivially to include some basic new rules, without strongly impacting the general flow architecture, which might make it easy enough to evade signatures. A key-based implementation would also not be too difficult to implement, if you didn't like leaving the full data in an accessible state for an analyst to access. I currently limit the skip byte to 1-9 purely for size reasons, as this already results in quite a large average encoded string.
+The method could be altered rather trivially to include some basic new rules, without strongly impacting the general flow architecture, which might make it easy enough to evade signatures. A key-based implementation would also not be too difficult to implement, if you didn't like leaving the full data in an accessible state for an analyst to access. I currently limit the skip byte to 1-9 purely for size reasons, as this already results in quite a large average encoded string. You could create a new encoder to bias to lower skip byte values, if you wanted to lower the size overhead, but this will come at the cost of obfuscation. The absolute bare minimum you could get would be a 4x payload increase, which would lead to predictable byte-distance.

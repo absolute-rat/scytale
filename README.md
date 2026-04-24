@@ -4,7 +4,7 @@ scytale is a low-entropy/lightweight stream encoder, implemented in pure x64 ass
 
 ## Pros
 
-- Small footprint (<200 bytes)
+- Small footprint (154 bytes for both, and just 60 bytes for the decoder)
 - Maintans a low entropy score (around ~4.0) no matter what data is being encoded
 - Avoids predictable byte-distance pattern recognition
 

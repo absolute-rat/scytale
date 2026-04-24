@@ -36,9 +36,9 @@ D = PAYLOAD BYTE
 
 This is 'ABC' encoded in scytale:
 
-2F3BBC14939DFAB0B1241E34
+2F3BBC14739DFBB1241E34
 
-2F is our garbage header. 3 indicates 3 garbage characters (BBC) to skip. '14' is our 0x41. 9 is our next part of the stream, indicating 9 garbage characters (39DFAB0B1) to skip. '24' is our 0x42. 1 indicates a single garbage character (E) to skip, so '34' is our final byte, 0x43.
+2F is our garbage header. 3 indicates 3 garbage characters (BBC) to skip. '14' is our 0x41. 9 is our next part of the stream, indicating 7 garbage characters (39DFBB1) to skip. '24' is our 0x42. 1 indicates a single garbage character (E) to skip, so '34' is our final byte, 0x43.
 
 
 ## Notes

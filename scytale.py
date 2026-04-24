@@ -13,7 +13,7 @@ def scytale_encode(data):
     complete = random.choice("0123456789ABCDEF") + random.choice("0123456789ABCDEF")
     i = 0
     while (i < len(data)):
-        randskip = random.randint(0,9)
+        randskip = random.randint(0,7)
         complete += str(randskip)
         while (randskip):
             complete += random.choice("0123456789ABCDEF")

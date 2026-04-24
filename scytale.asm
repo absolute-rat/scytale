@@ -11,8 +11,7 @@ scytale_decode:
 	mov rsi, rcx				; encoded_payload
 	mov rdi, rdx				; buf
 	lodsw					; skip 2-byte header
-
-.mainloop:
+.dmainloop:
 	lodsb					; grab the skip byte
 	test al, al				; did we hit a null terminator?
 	jz .ddone
@@ -35,7 +34,7 @@ scytale_decode:
 	shl al, 4				; shift the bits over
 	or al, r8b				; let our nibbles combine 
 	stosb					; add to buf
-	jmp .main_loop				; all of this has happened before...
+	jmp .dmainloop				; all of this has happened before...
 
 .ddone:
 	mov rax, rdi				; set up the return pointer
@@ -53,30 +52,32 @@ scytale_encode:
 	call .converttohex			; store first byte of header garbage
 	rdtsc					; get some more entropy
 	call .converttohex			; store second byte of header garbage
-.mainloop
+.emainloop:
 	rdtsc					; grab our entropy
 	and rax, 7				; grab the last 3 bits (0-7)
 	mov rcx, rax				; store the garbage loop counter
 	call .converttohex			; store the skip byte
-.paddingloop
+	jrcxz .continue				; if we have a 0 skip byte, no need to pad
+.paddingloop:
 	rdtsc					; load our entropy
 	call .converttohex			; store the byte
 	loop .paddingloop
+.continue:
 	lodsb					; load the byte from the string
-	mov rdx, rax
-	
-
-
-
-
-	test r8, r8				; did we finish the loop?
-	jz .edone
-	
-
-	
-
-
-
+	mov rdx, rax				; so we don't lose it
+	shr rax, 4				; get the last 4 bits
+	call .converttohex			; store the upper nibble
+	mov rax, rdx				; move the lower nibble
+	call .converttohex			; store the lower nibble
+	dec r8					; loop counter
+	jnz .emainloop
+.edone:
+	xor rax, rax				; create a null terminator
+	stosb					; store it at the end
+	xchg rax, rdi				; store the return pointer for the end of the string
+	pop rdi					; cleanup
+	pop rsi
+	ret	
 .converttohex:
 	and al, 0x0F				; remove the top bits
 	add al, 0x30				; convert to a character
